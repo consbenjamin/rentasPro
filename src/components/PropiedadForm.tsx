@@ -32,11 +32,16 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
   const [estado, setEstado] = useState<EstadoPropiedad>(propiedad?.estado ?? "disponible");
   const [precioActual, setPrecioActual] = useState(propiedad?.precio_actual?.toString() ?? "");
   const [notas, setNotas] = useState(propiedad?.notas ?? "");
-  const [fotosNotas, setFotosNotas] = useState(
-    typeof propiedad?.fotos_notas_json === "object" && propiedad?.fotos_notas_json
-      ? JSON.stringify(propiedad.fotos_notas_json, null, 2)
-      : "{}"
-  );
+  const [fotosNotas, setFotosNotas] = useState<{ etiqueta: string; descripcion: string }[]>(() => {
+    const json = propiedad?.fotos_notas_json;
+    if (typeof json !== "object" || json === null) return [{ etiqueta: "", descripcion: "" }];
+    const entries = Object.entries(json as Record<string, unknown>);
+    if (entries.length === 0) return [{ etiqueta: "", descripcion: "" }];
+    return entries.map(([etiqueta, val]) => ({
+      etiqueta,
+      descripcion: typeof val === "string" ? val : "",
+    }));
+  });
 
   useEffect(() => {
     const client = createClient();
@@ -51,13 +56,9 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    let parsed: Record<string, unknown> = {};
-    try {
-      parsed = JSON.parse(fotosNotas);
-    } catch {
-      setError("Fotos/notas: JSON inválido");
-      setLoading(false);
-      return;
+    const parsed: Record<string, string> = {};
+    for (const item of fotosNotas) {
+      if (item.etiqueta.trim()) parsed[item.etiqueta.trim()] = item.descripcion.trim();
     }
     const payload = {
       direccion,
@@ -192,14 +193,56 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
           className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
-      <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fotos/notas (JSON)</label>
-        <textarea
-          value={fotosNotas}
-          onChange={(e) => setFotosNotas(e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg font-mono text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
-        />
+      <div className="rounded-lg border border-slate-200 dark:border-slate-600 p-3 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            Fotos / referencias (opcional)
+          </p>
+          <button
+            type="button"
+            onClick={() => setFotosNotas((f) => [...f, { etiqueta: "", descripcion: "" }])}
+            className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            + Agregar
+          </button>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Ej: "Frente", "Living" con su descripción
+        </p>
+        {fotosNotas.map((item, i) => (
+          <div key={i} className="flex gap-2 items-start p-2 rounded bg-slate-50 dark:bg-slate-700/50">
+            <div className="flex-1 grid gap-2 sm:grid-cols-2">
+              <input
+                value={item.etiqueta}
+                onChange={(e) => {
+                  const n = [...fotosNotas];
+                  n[i] = { ...n[i], etiqueta: e.target.value };
+                  setFotosNotas(n);
+                }}
+                placeholder="Etiqueta (ej: Frente)"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+              />
+              <input
+                value={item.descripcion}
+                onChange={(e) => {
+                  const n = [...fotosNotas];
+                  n[i] = { ...n[i], descripcion: e.target.value };
+                  setFotosNotas(n);
+                }}
+                placeholder="Descripción"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setFotosNotas((f) => f.filter((_, j) => j !== i))}
+              className="text-red-600 dark:text-red-400 p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded"
+              title="Quitar"
+            >
+              ×
+            </button>
+          </div>
+        ))}
       </div>
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
       <div className="flex flex-wrap gap-2">
