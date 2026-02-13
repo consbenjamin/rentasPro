@@ -93,14 +93,14 @@ export function PagoForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-slate-200 p-6 max-w-lg space-y-4">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 max-w-lg space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Contrato *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Contrato *</label>
         <select
           value={contratoSel}
           onChange={(e) => setContratoSel(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         >
           <option value="">Seleccionar</option>
           {contratos.map((c) => {
@@ -117,17 +117,17 @@ export function PagoForm({
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Mes adeudado *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mes adeudado *</label>
         <input
           type="month"
           value={mesAdeudado ? mesAdeudado.slice(0, 7) : ""}
           onChange={(e) => setMesAdeudado(e.target.value ? `${e.target.value}-01` : "")}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Monto *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Monto *</label>
         <input
           type="number"
           min="0"
@@ -135,26 +135,26 @@ export function PagoForm({
           value={monto}
           onChange={(e) => setMonto(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Fecha de pago *</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fecha de pago *</label>
           <input
             type="date"
             value={fechaPago}
             onChange={(e) => setFechaPago(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Método</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Método</label>
           <select
             value={metodo}
             onChange={(e) => setMetodo(e.target.value as MetodoPago)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           >
             {METODO_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -163,18 +163,18 @@ export function PagoForm({
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Recargo por mora</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Recargo por mora</label>
         <input
           type="number"
           min="0"
           step="0.01"
           value={recargoMora}
           onChange={(e) => setRecargoMora(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="flex gap-2">
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+      <div className="flex flex-wrap gap-2">
         <button
           type="submit"
           disabled={loading}
@@ -185,7 +185,7 @@ export function PagoForm({
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700"
+          className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
         >
           Cancelar
         </button>

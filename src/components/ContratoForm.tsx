@@ -119,14 +119,14 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-slate-200 p-6 max-w-lg space-y-4">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 max-w-lg space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Propiedad *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Propiedad *</label>
         <select
           value={propiedadId}
           onChange={(e) => setPropiedadId(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         >
           <option value="">Seleccionar</option>
           {propiedades.map((p) => (
@@ -135,12 +135,12 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Inquilino *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Inquilino *</label>
         <select
           value={inquilinoId}
           onChange={(e) => setInquilinoId(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         >
           <option value="">Seleccionar</option>
           {inquilinos.map((i) => (
@@ -149,12 +149,12 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Propietario *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Propietario *</label>
         <select
           value={propietarioId}
           onChange={(e) => setPropietarioId(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         >
           <option value="">Seleccionar</option>
           {propietarios.map((p) => (
@@ -162,31 +162,31 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
           ))}
         </select>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Fecha inicio *</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fecha inicio *</label>
           <input
             type="date"
             value={fechaInicio}
             onChange={(e) => setFechaInicio(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Fecha fin *</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fecha fin *</label>
           <input
             type="date"
             value={fechaFin}
             onChange={(e) => setFechaFin(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Monto mensual *</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Monto mensual *</label>
           <input
             type="number"
             min="0"
@@ -194,39 +194,39 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
             value={montoMensual}
             onChange={(e) => setMontoMensual(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Día vencimiento (1-28)</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Día vencimiento (1-28)</label>
           <input
             type="number"
             min={1}
             max={28}
             value={diaVencimiento}
             onChange={(e) => setDiaVencimiento(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Depósito</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Depósito</label>
           <input
             type="number"
             min="0"
             step="0.01"
             value={deposito}
             onChange={(e) => setDeposito(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Estado</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Estado</label>
           <select
             value={estado}
             onChange={(e) => setEstado(e.target.value as EstadoContrato)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           >
             {ESTADO_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -234,25 +234,25 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
           </select>
         </div>
       </div>
-      <div className="border-t border-slate-200 pt-4">
-        <p className="text-sm font-medium text-slate-700 mb-2">Incremento (opcional)</p>
-        <div className="grid grid-cols-3 gap-4">
+      <div className="border-t border-slate-200 dark:border-slate-600 pt-4">
+        <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Incremento (opcional)</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs text-slate-500 mb-1">Cada (meses)</label>
+            <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Cada (meses)</label>
             <input
               type="number"
               min="0"
               value={incrementoCadaMeses}
               onChange={(e) => setIncrementoCadaMeses(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-500 mb-1">Tipo</label>
+            <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Tipo</label>
             <select
               value={incrementoTipo}
               onChange={(e) => setIncrementoTipo(e.target.value as IncrementoTipo | "")}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
             >
               <option value="">—</option>
               {INCREMENTO_OPTIONS.map((o) => (
@@ -261,20 +261,20 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-slate-500 mb-1">Valor</label>
+            <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Valor</label>
             <input
               type="number"
               min="0"
               step="0.01"
               value={incrementoValor}
               onChange={(e) => setIncrementoValor(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
             />
           </div>
         </div>
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="flex gap-2">
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+      <div className="flex flex-wrap gap-2">
         <button
           type="submit"
           disabled={loading}
@@ -285,7 +285,7 @@ export function ContratoForm({ contrato }: { contrato?: Contrato }) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700"
+          className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
         >
           Cancelar
         </button>

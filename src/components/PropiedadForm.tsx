@@ -98,24 +98,24 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-slate-200 p-6 max-w-lg space-y-4">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 max-w-lg space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Dirección *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Dirección *</label>
         <input
           type="text"
           value={direccion}
           onChange={(e) => setDireccion(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Tipo</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo</label>
           <select
             value={tipo}
             onChange={(e) => setTipo(e.target.value as TipoPropiedad)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           >
             {TIPO_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -123,11 +123,11 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Estado</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Estado</label>
           <select
             value={estado}
             onChange={(e) => setEstado(e.target.value as EstadoPropiedad)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           >
             {ESTADO_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -136,12 +136,12 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Propietario *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Propietario *</label>
         <select
           value={propietarioId}
           onChange={(e) => setPropietarioId(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         >
           <option value="">Seleccionar</option>
           {propietarios.map((p) => (
@@ -149,60 +149,60 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
           ))}
         </select>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">m²</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">m²</label>
           <input
             type="number"
             min="0"
             step="0.01"
             value={m2}
             onChange={(e) => setM2(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Ambientes</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Ambientes</label>
           <input
             type="number"
             min="0"
             value={ambientes}
             onChange={(e) => setAmbientes(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Precio actual</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Precio actual</label>
         <input
           type="number"
           min="0"
           step="0.01"
           value={precioActual}
           onChange={(e) => setPrecioActual(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Notas</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Notas</label>
         <textarea
           value={notas}
           onChange={(e) => setNotas(e.target.value)}
           rows={2}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Fotos/notas (JSON)</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fotos/notas (JSON)</label>
         <textarea
           value={fotosNotas}
           onChange={(e) => setFotosNotas(e.target.value)}
           rows={3}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg font-mono text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="flex gap-2">
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+      <div className="flex flex-wrap gap-2">
         <button
           type="submit"
           disabled={loading}
@@ -213,7 +213,7 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700"
+          className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
         >
           Cancelar
         </button>

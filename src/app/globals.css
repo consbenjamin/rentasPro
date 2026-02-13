@@ -7,7 +7,14 @@
   --foreground: #0f172a;
 }
 
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
 }
+
+/* Evitar flash en modo oscuro: el script en layout setea la clase antes del primer paint */

@@ -86,16 +86,16 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4 sm:mb-6">Dashboard</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {cards.map(({ title, value, href }) => (
           <Link
             key={title}
             href={href}
-            className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow transition"
+            className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 shadow-sm hover:shadow transition"
           >
-            <p className="text-slate-500 text-sm">{title}</p>
-            <p className="text-xl font-bold text-slate-800 mt-1">{value}</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">{title}</p>
+            <p className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 mt-1 break-words">{value}</p>
           </Link>
         ))}
       </div>

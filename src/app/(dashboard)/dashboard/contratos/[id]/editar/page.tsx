@@ -13,7 +13,7 @@ export default async function EditarContratoPage({
   if (!data) notFound();
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Editar contrato</h1>
+      <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4 sm:mb-6">Editar contrato</h1>
       <ContratoForm contrato={data} />
     </div>
   );

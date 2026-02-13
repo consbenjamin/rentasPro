@@ -21,12 +21,12 @@ export function LiquidacionForm({ propietarios }: { propietarios: Prop[] }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Propietario *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Propietario *</label>
         <select
           value={propietarioId}
           onChange={(e) => setPropietarioId(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         >
           <option value="">Seleccionar</option>
           {propietarios.map((p) => (
@@ -34,23 +34,23 @@ export function LiquidacionForm({ propietarios }: { propietarios: Prop[] }) {
           ))}
         </select>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Desde</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Desde</label>
           <input
             type="date"
             value={desde}
             onChange={(e) => setDesde(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Hasta</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Hasta</label>
           <input
             type="date"
             value={hasta}
             onChange={(e) => setHasta(e.target.value)}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
           />
         </div>
       </div>

@@ -78,64 +78,64 @@ export function InquilinoForm({ inquilino }: { inquilino?: Inquilino }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-slate-200 p-6 max-w-lg space-y-4">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 max-w-lg space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Nombre *</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre *</label>
         <input
           type="text"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">DNI/CUIT</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">DNI/CUIT</label>
         <input
           type="text"
           value={dniCuit}
           onChange={(e) => setDniCuit(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Teléfono</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Teléfono</label>
         <input
           type="text"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Garantes (JSON)</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Garantes (JSON)</label>
         <textarea
           value={garantes}
           onChange={(e) => setGarantes(e.target.value)}
           rows={3}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg font-mono text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Documentos (JSON)</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Documentos (JSON)</label>
         <textarea
           value={documentos}
           onChange={(e) => setDocumentos(e.target.value)}
           rows={3}
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm"
+          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg font-mono text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
         />
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="flex gap-2">
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+      <div className="flex flex-wrap gap-2">
         <button
           type="submit"
           disabled={loading}
@@ -146,7 +146,7 @@ export function InquilinoForm({ inquilino }: { inquilino?: Inquilino }) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700"
+          className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
         >
           Cancelar
         </button>

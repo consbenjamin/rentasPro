@@ -35,68 +35,70 @@ export default async function AlertasPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Alertas</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
+        <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Alertas</h1>
         {sinLeer > 0 && (
           <MarcarAlertasLeidas />
         )}
       </div>
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-slate-50 border-b border-slate-200">
-            <tr>
-              <th className="px-4 py-3 text-sm font-medium text-slate-600">Fecha</th>
-              <th className="px-4 py-3 text-sm font-medium text-slate-600">Tipo</th>
-              <th className="px-4 py-3 text-sm font-medium text-slate-600">Contrato</th>
-              <th className="px-4 py-3 text-sm font-medium text-slate-600">Mensaje</th>
-              <th className="px-4 py-3 text-sm font-medium text-slate-600 w-20">Leída</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(list ?? []).map((a) => {
-              const c = a.contratos as unknown as {
-                propiedades?: { direccion: string } | { direccion: string }[] | null;
-                inquilinos?: { nombre: string } | { nombre: string }[] | null;
-              } | null;
-              const prop = c?.propiedades;
-              const inqu = c?.inquilinos;
-              const direccion = Array.isArray(prop) ? prop[0]?.direccion : (prop as { direccion: string } | null)?.direccion;
-              const nombreInq = Array.isArray(inqu) ? inqu[0]?.nombre : (inqu as { nombre: string } | null)?.nombre;
-              return (
-                <tr
-                  key={a.id}
-                  className={`border-b border-slate-100 ${!a.leida ? "bg-amber-50/50" : ""}`}
-                >
-                  <td className="px-4 py-3 text-slate-600 text-sm">
-                    {format(new Date(a.fecha_generada), "dd/MM/yyyy HH:mm", { locale: es })}
-                  </td>
-                  <td className="px-4 py-3 text-slate-700">
-                    {TIPO_LABEL[a.tipo] ?? a.tipo}
-                  </td>
-                  <td className="px-4 py-3 text-slate-600 text-sm">
-                    {direccion ?? "—"}
-                    {nombreInq && (
-                      <span className="text-slate-400"> / {nombreInq}</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-slate-800">{a.mensaje}</td>
-                  <td className="px-4 py-3">
-                    {a.leida ? (
-                      <span className="text-slate-400 text-sm">Sí</span>
-                    ) : (
-                      <span className="text-amber-600 text-sm font-medium">No</span>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        {(!list || list.length === 0) && (
-          <p className="px-4 py-8 text-slate-500 text-center">
-            No hay alertas. Las alertas se generan automáticamente (cron) o al registrar vencimientos.
-          </p>
-        )}
+      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 min-w-[560px]">
+          <table className="w-full text-left">
+            <thead className="bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-600">
+              <tr>
+                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Fecha</th>
+                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Tipo</th>
+                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Contrato</th>
+                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Mensaje</th>
+                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300 w-20">Leída</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(list ?? []).map((a) => {
+                const c = a.contratos as unknown as {
+                  propiedades?: { direccion: string } | { direccion: string }[] | null;
+                  inquilinos?: { nombre: string } | { nombre: string }[] | null;
+                } | null;
+                const prop = c?.propiedades;
+                const inqu = c?.inquilinos;
+                const direccion = Array.isArray(prop) ? prop[0]?.direccion : (prop as { direccion: string } | null)?.direccion;
+                const nombreInq = Array.isArray(inqu) ? inqu[0]?.nombre : (inqu as { nombre: string } | null)?.nombre;
+                return (
+                  <tr
+                    key={a.id}
+                    className={`border-b border-slate-100 dark:border-slate-700 ${!a.leida ? "bg-amber-50/50 dark:bg-amber-900/20" : ""}`}
+                  >
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-400 text-sm">
+                      {format(new Date(a.fecha_generada), "dd/MM/yyyy HH:mm", { locale: es })}
+                    </td>
+                    <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
+                      {TIPO_LABEL[a.tipo] ?? a.tipo}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-400 text-sm">
+                      {direccion ?? "—"}
+                      {nombreInq && (
+                        <span className="text-slate-400 dark:text-slate-500"> / {nombreInq}</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-slate-800 dark:text-slate-200">{a.mensaje}</td>
+                    <td className="px-4 py-3">
+                      {a.leida ? (
+                        <span className="text-slate-400 dark:text-slate-500 text-sm">Sí</span>
+                      ) : (
+                        <span className="text-amber-600 dark:text-amber-400 text-sm font-medium">No</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {(!list || list.length === 0) && (
+            <p className="px-4 py-8 text-slate-500 dark:text-slate-400 text-center">
+              No hay alertas. Las alertas se generan automáticamente (cron) o al registrar vencimientos.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

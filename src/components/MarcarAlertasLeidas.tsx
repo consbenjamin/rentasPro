@@ -19,7 +19,7 @@ export function MarcarAlertasLeidas() {
       type="button"
       onClick={handleClick}
       disabled={loading}
-      className="px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+      className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
     >
       {loading ? "…" : "Marcar todas como leídas"}
     </button>
