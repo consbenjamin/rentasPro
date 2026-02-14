@@ -17,6 +17,7 @@ const ROL_LABEL: Record<RolUsuario, string> = {
 const NAV_LINKS: { href: string; label: string; roles?: RolUsuario[] }[] = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/propiedades", label: "Propiedades", roles: ["admin", "operador", "owner", "viewer"] },
+  { href: "/dashboard/mapa", label: "Mapa", roles: ["admin", "operador", "owner", "viewer"] },
   { href: "/dashboard/inquilinos", label: "Inquilinos", roles: ["admin", "operador", "viewer"] },
   { href: "/dashboard/propietarios", label: "Propietarios", roles: ["admin", "operador", "viewer"] },
   { href: "/dashboard/contratos", label: "Contratos" },

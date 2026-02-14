@@ -42,6 +42,8 @@ export interface Propiedad {
   propietario_id: string;
   estado: EstadoPropiedad;
   precio_actual: number | null;
+  lat: number | null;
+  lng: number | null;
   fotos_notas_json: Record<string, unknown>;
   notas: string | null;
   created_at: string;

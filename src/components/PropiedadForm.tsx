@@ -52,6 +52,17 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
       .then(({ data }) => setPropietarios(data ?? []));
   }, []);
 
+  async function geocodeAndSavePropiedad(propiedadId: string) {
+    const res = await fetch(`/api/geocode?address=${encodeURIComponent(direccion)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (typeof data.lat !== "number" || typeof data.lng !== "number") return;
+    await supabase
+      .from("propiedades")
+      .update({ lat: data.lat, lng: data.lng, updated_at: new Date().toISOString() })
+      .eq("id", propiedadId);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -72,6 +83,7 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
       fotos_notas_json: parsed,
       updated_at: new Date().toISOString(),
     };
+    let propiedadId: string | null = null;
     if (propiedad) {
       const { error: err } = await supabase
         .from("propiedades")
@@ -82,16 +94,24 @@ export function PropiedadForm({ propiedad }: { propiedad?: Propiedad }) {
         setLoading(false);
         return;
       }
+      propiedadId = propiedad.id;
     } else {
-      const { error: err } = await supabase.from("propiedades").insert({
-        ...payload,
-        propietario_id: propietarioId,
-      });
+      const { data: inserted, error: err } = await supabase
+        .from("propiedades")
+        .insert({ ...payload, propietario_id: propietarioId })
+        .select("id")
+        .single();
       if (err) {
         setError(err.message);
         setLoading(false);
         return;
       }
+      propiedadId = inserted?.id ?? null;
+    }
+    const direccionCambio = propiedad ? direccion !== propiedad.direccion : true;
+    const sinCoords = propiedad ? propiedad.lat == null && propiedad.lng == null : true;
+    if (propiedadId && direccion.trim() && (direccionCambio || sinCoords)) {
+      await geocodeAndSavePropiedad(propiedadId);
     }
     setLoading(false);
     router.push("/dashboard/propiedades");
