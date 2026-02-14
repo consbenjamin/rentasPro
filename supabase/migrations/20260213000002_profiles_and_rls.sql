@@ -49,9 +49,10 @@ CREATE POLICY "Users can update own profile" ON public.profiles
   FOR UPDATE USING (auth.uid() = id);
 
 -- Admin puede ver y actualizar cualquier profile (incl. rol)
+-- Usar current_user_profile() (SECURITY DEFINER) para evitar recursión: no leer profiles desde una policy ON profiles
 CREATE POLICY "Admin can manage all profiles" ON public.profiles
   FOR ALL USING (
-    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND rol = 'admin')
+    (SELECT role FROM public.current_user_profile() LIMIT 1) = 'admin'
   );
 
 -- Políticas PROPIETARIOS
