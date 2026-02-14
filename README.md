@@ -34,6 +34,39 @@ Sistema de gestión de alquileres para inmobiliarias pequeñas. Backend con **Su
 
 4. (Opcional) Crear buckets en Storage: ver `docs/STORAGE.md`.
 
+## Qué hace la app
+
+Rentas Pro sirve para llevar la gestión de alquileres: propiedades, dueños, inquilinos, contratos y pagos. Cada usuario entra con su cuenta y, según su rol, ve y hace distintas cosas.
+
+### Quién puede usarla (roles)
+
+- **Admin**: Ve todo y puede dar de alta y editar propiedades, inquilinos, propietarios, contratos y pagos. Es el único que gestiona usuarios y roles.
+- **Operador**: Igual que el admin en el día a día (altas, ediciones), pero no administra usuarios.
+- **Propietario**: Solo ve y trabaja con sus propias propiedades, contratos, pagos y alertas.
+- **Solo lectura**: Puede ver la información pero no crear ni modificar nada.
+
+### Funcionalidades
+
+- **Inicio de sesión**: Entrada con email y contraseña. Si no estás logueado, la app te lleva al login; si ya estás logueado, al panel principal.
+
+- **Panel principal (Dashboard)**: Resumen con ingresos del mes, ingresos acumulados, morosidad (contratos con pagos atrasados), contratos que vencen en 7, 30 o 60 días, porcentaje de ocupación y cantidad de alertas sin leer. Cada número lleva a la sección correspondiente.
+
+- **Propiedades**: Listado de propiedades (dirección, tipo, propietario, estado, precio). Se pueden dar de alta nuevas y editar las existentes. Los estados son: disponible, alquilada, en mantenimiento.
+
+- **Inquilinos**: Listado de inquilinos con datos de contacto. Alta y edición de inquilinos (nombre, DNI/CUIT, email, teléfono, garantes, documentos).
+
+- **Propietarios**: Listado de dueños con datos de contacto y datos bancarios. Alta y edición de propietarios.
+
+- **Contratos**: Contratos que vinculan una propiedad, un inquilino y un propietario, con fechas de inicio y fin, monto mensual, día de vencimiento del alquiler, depósito y reglas de aumento (porcentaje o monto fijo cada X meses). Estados: activo, finalizado, rescindido.
+
+- **Pagos**: Registro de pagos por contrato y mes. Se indica monto, fecha de pago, método (efectivo, transferencia, etc.) y opcionalmente recargo por mora. Permite llevar el control de lo cobrado y lo pendiente.
+
+- **Alertas**: Avisos automáticos para no perder de vista vencimientos: contrato por vencer, alquiler que vence hoy o mañana, pago vencido, aumento según contrato. Las alertas se pueden marcar como leídas. Se generan en forma automática (por ejemplo una vez al día) si se configura el cron de alertas.
+
+- **Reportes PDF**: Generación de recibos de pago y liquidaciones para el propietario en PDF, para descargar o imprimir.
+
+- **Usuarios** (solo admin): Alta de usuarios y asignación de rol (admin, operador, propietario, solo lectura). Para los propietarios se asocia el usuario al propietario correspondiente para que solo vea sus datos.
+
 ## Desarrollo
 
 ```bash
