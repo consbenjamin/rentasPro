@@ -59,40 +59,42 @@ export default async function PagosPage() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Pagos y deuda</h1>
-        <Link
-          href="/dashboard/pagos/nuevo"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 w-fit"
-        >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+        <div>
+          <h1 className="page-title">Pagos y deuda</h1>
+          <p className="page-subtitle">Estado de cobranza y registro de pagos</p>
+        </div>
+        <Link href="/dashboard/pagos/nuevo" className="btn-primary w-fit shrink-0">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
           Registrar pago
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-          <p className="text-slate-500 dark:text-slate-400 text-sm">Al día (este y pasado mes)</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 min-w-0">
+        <div className="card card-body">
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Al día (este y pasado mes)</p>
           <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">{alDia}</p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-          <p className="text-slate-500 dark:text-slate-400 text-sm">Deben (este o pasado mes)</p>
+        <div className="card card-body">
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Deben (este o pasado mes)</p>
           <p className="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400">{debe}</p>
         </div>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
-        <div className="bg-white dark:bg-slate-800 min-w-[640px]">
-          <table className="w-full text-left">
-            <thead className="bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-600">
+      <div className="table-container">
+        <table className="w-full text-left min-w-[640px]">
+            <thead className="table-header">
               <tr>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Propiedad / Inquilino</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Mes</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Monto</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Estado</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300 w-24" />
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Propiedad / Inquilino</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Mes</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Monto</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Estado</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300 w-24" />
               </tr>
             </thead>
             <tbody>
               {filas.map((f) => (
-                <tr key={`${f.contrato_id}-${f.mes_adeudado}`} className="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/30">
+                <tr key={`${f.contrato_id}-${f.mes_adeudado}`} className="border-b border-slate-100 dark:border-slate-700/50 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
                   <td className="px-4 py-3">
                     <p className="text-slate-800 dark:text-slate-200 font-medium">{f.direccion}</p>
                     <p className="text-slate-500 dark:text-slate-400 text-sm">{f.inquilino}</p>
@@ -118,14 +120,14 @@ export default async function PagosPage() {
                         href={`/api/pdf/recibo?pago_id=${f.pago_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline"
+                        className="text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:underline"
                       >
                         Recibo
                       </a>
                     ) : !f.pagado ? (
                       <Link
                         href={`/dashboard/pagos/nuevo?contrato=${f.contrato_id}&mes=${f.mes_adeudado.slice(0, 7)}`}
-                        className="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline"
+                        className="text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:underline"
                       >
                         Registrar
                       </Link>
@@ -135,12 +137,11 @@ export default async function PagosPage() {
               ))}
             </tbody>
           </table>
-          {filas.length === 0 && (
-            <p className="px-4 py-8 text-slate-500 dark:text-slate-400 text-center">
-              No hay contratos activos para mostrar pagos.
-            </p>
-          )}
-        </div>
+        {filas.length === 0 && (
+          <div className="px-4 py-12 text-slate-500 dark:text-slate-400 text-center">
+            No hay contratos activos para mostrar pagos.
+          </div>
+        )}
       </div>
     </div>
   );

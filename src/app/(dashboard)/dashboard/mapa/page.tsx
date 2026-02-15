@@ -25,9 +25,10 @@ export default async function MapaPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4 sm:mb-6">
-        Mapa de propiedades
-      </h1>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="page-title">Mapa de propiedades</h1>
+        <p className="page-subtitle">Ubicación geográfica de tus inmuebles</p>
+      </div>
       {propiedades.length === 0 ? (
         <p className="text-slate-500 dark:text-slate-400">
           No hay propiedades. Agregá al menos una para verlas en el mapa.

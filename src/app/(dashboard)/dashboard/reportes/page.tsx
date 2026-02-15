@@ -10,8 +10,11 @@ export default async function ReportesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4 sm:mb-6">Reportes PDF</h1>
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 max-w-md">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="page-title">Reportes PDF</h1>
+        <p className="page-subtitle">Genera liquidaciones y reportes para propietarios</p>
+      </div>
+      <div className="card card-body max-w-md">
         <h2 className="font-medium text-slate-800 dark:text-slate-200 mb-4">Liquidación al propietario</h2>
         <LiquidacionForm propietarios={propietarios ?? []} />
       </div>

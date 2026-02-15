@@ -79,23 +79,33 @@ export default async function DashboardPage() {
     { title: "Ingresos del mes", value: `$${ingresosMes.toLocaleString("es-AR")}`, href: "/dashboard/pagos" },
     { title: "Ingresos acumulado", value: `$${ingresosAcumulado.toLocaleString("es-AR")}`, href: "/dashboard/pagos" },
     { title: "Morosidad", value: `${morosidadCount} contrato(s) · $${morosidadMonto.toLocaleString("es-AR")}`, href: "/dashboard/pagos" },
-    { title: "Contratos por vencer (7 / 30 / 60 días)", value: `${vencen7} / ${vencen30} / ${vencen60}`, href: "/dashboard/contratos" },
-    { title: "Ocupación", value: `${ocupacion}% (${alquiladas}/${totalProp})`, href: "/dashboard/propiedades" },
+    { title: "Contratos por vencer", sub: "7 / 30 / 60 días", value: `${vencen7} / ${vencen30} / ${vencen60}`, href: "/dashboard/contratos" },
+    { title: "Ocupación", value: `${ocupacion}%`, sub: `${alquiladas}/${totalProp} propiedades`, href: "/dashboard/propiedades" },
     { title: "Alertas sin leer", value: String(countAlertas ?? 0), href: "/dashboard/alertas" },
   ];
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4 sm:mb-6">Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {cards.map(({ title, value, href }) => (
+      <div className="mb-6 sm:mb-8">
+        <h1 className="page-title">Dashboard</h1>
+        <p className="page-subtitle">Resumen general de tu operación</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {cards.map(({ title, value, sub, href }) => (
           <Link
             key={title}
             href={href}
-            className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 shadow-sm hover:shadow transition"
+            className="card group block overflow-hidden"
           >
-            <p className="text-slate-500 dark:text-slate-400 text-sm">{title}</p>
-            <p className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 mt-1 break-words">{value}</p>
+            <div className="card-body">
+              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{title}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100 mt-2 tracking-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                {value}
+              </p>
+              {sub && (
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{sub}</p>
+              )}
+            </div>
           </Link>
         ))}
       </div>

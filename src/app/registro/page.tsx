@@ -1,50 +1,68 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 import { AuthCard } from "@/components/AuthCard";
 
-export default function LoginPage() {
+export default function RegistroPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmar, setConfirmar] = useState("");
+  const [nombre, setNombre] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
   const supabase = createClient();
-
-  useEffect(() => {
-    const err = searchParams.get("error");
-    const mensaje = searchParams.get("mensaje");
-    if (err) setError(decodeURIComponent(err));
-    if (mensaje) setError(null); // mensaje de éxito se muestra aparte
-  }, [searchParams]);
-
-  const mensaje = searchParams.get("mensaje");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setLoading(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
-    if (signInError) {
-      setError(signInError.message);
+    if (password.length < 6) {
+      setError("La contraseña debe tener al menos 6 caracteres.");
       return;
     }
-    router.push("/dashboard");
+    if (password !== confirmar) {
+      setError("Las contraseñas no coinciden.");
+      return;
+    }
+    setLoading(true);
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: nombre ? { nombre } : undefined },
+    });
+    setLoading(false);
+    if (signUpError) {
+      setError(signUpError.message);
+      return;
+    }
+    router.push("/login?mensaje=Revisa tu correo para confirmar la cuenta");
     router.refresh();
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 sm:p-6">
       <AuthCard
-        title="Iniciar sesión"
-        subtitle="Gestión de alquileres para inmobiliarias"
+        title="Crear cuenta"
+        subtitle="Regístrate para acceder a Rentas Pro"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="nombre" className="auth-label">
+              Nombre (opcional)
+            </label>
+            <input
+              id="nombre"
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              autoComplete="name"
+              className="auth-input"
+              placeholder="Tu nombre"
+            />
+          </div>
           <div>
             <label htmlFor="email" className="auth-label">
               Email
@@ -70,29 +88,41 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              autoComplete="current-password"
+              minLength={6}
+              autoComplete="new-password"
               className="auth-input"
-              placeholder="••••••••"
+              placeholder="Mínimo 6 caracteres"
             />
           </div>
-          {mensaje && (
-            <p className="text-sm text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg px-3 py-2">
-              {decodeURIComponent(mensaje)}
-            </p>
-          )}
+          <div>
+            <label htmlFor="confirmar" className="auth-label">
+              Confirmar contraseña
+            </label>
+            <input
+              id="confirmar"
+              type="password"
+              value={confirmar}
+              onChange={(e) => setConfirmar(e.target.value)}
+              required
+              minLength={6}
+              autoComplete="new-password"
+              className="auth-input"
+              placeholder="Repite la contraseña"
+            />
+          </div>
           {error && (
             <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
           <button type="submit" disabled={loading} className="auth-button primary w-full">
-            {loading ? "Entrando…" : "Entrar"}
+            {loading ? "Creando cuenta…" : "Registrarme"}
           </button>
         </form>
         <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-          ¿No tienes cuenta?{" "}
-          <Link href="/registro" className="text-emerald-600 dark:text-emerald-400 font-medium hover:underline">
-            Regístrate
+          ¿Ya tienes cuenta?{" "}
+          <Link href="/login" className="text-emerald-600 dark:text-emerald-400 font-medium hover:underline">
+            Iniciar sesión
           </Link>
         </p>
       </AuthCard>

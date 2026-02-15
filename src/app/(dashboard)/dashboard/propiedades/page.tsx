@@ -22,31 +22,33 @@ export default async function PropiedadesPage() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6">
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Propiedades</h1>
-        <Link
-          href="/dashboard/propiedades/nueva"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 w-fit"
-        >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+        <div>
+          <h1 className="page-title">Propiedades</h1>
+          <p className="page-subtitle">Gestiona tu cartera de inmuebles</p>
+        </div>
+        <Link href="/dashboard/propiedades/nueva" className="btn-primary w-fit shrink-0">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
           Nueva propiedad
         </Link>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
-        <div className="bg-white dark:bg-slate-800 min-w-[640px]">
-          <table className="w-full text-left">
-            <thead className="bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-600">
+      <div className="table-container">
+        <table className="w-full text-left min-w-[640px]">
+            <thead className="table-header">
               <tr>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Dirección</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Tipo</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Propietario</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Estado</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300">Precio</th>
-                <th className="px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300 w-20" />
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Dirección</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Tipo</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Propietario</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Estado</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300">Precio</th>
+                <th className="px-4 py-3.5 text-sm font-semibold text-slate-600 dark:text-slate-300 w-24" />
               </tr>
             </thead>
             <tbody>
               {(list ?? []).map((p) => (
-                <tr key={p.id} className="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/30">
+                <tr key={p.id} className="border-b border-slate-100 dark:border-slate-700/50 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
                   <td className="px-4 py-3 text-slate-800 dark:text-slate-200">{p.direccion}</td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{TIPO[p.tipo as TipoPropiedad]}</td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
@@ -71,21 +73,20 @@ export default async function PropiedadesPage() {
                   <td className="px-4 py-3">
                     <Link
                       href={`/dashboard/propiedades/${p.id}`}
-                      className="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline"
+                      className="text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:underline"
                     >
-                      Editar
+                      Ver
                     </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {(!list || list.length === 0) && (
-            <p className="px-4 py-8 text-slate-500 dark:text-slate-400 text-center">
-              No hay propiedades. Creá una desde &quot;Nueva propiedad&quot;.
-            </p>
-          )}
-        </div>
+        {(!list || list.length === 0) && (
+          <div className="px-4 py-12 text-slate-500 dark:text-slate-400 text-center">
+            No hay propiedades. Creá una desde &quot;Nueva propiedad&quot;.
+          </div>
+        )}
       </div>
     </div>
   );

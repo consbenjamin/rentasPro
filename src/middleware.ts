@@ -24,12 +24,13 @@ export async function middleware(request: NextRequest) {
   );
 
   const { data: { session } } = await supabase.auth.getSession();
+  const path = request.nextUrl.pathname;
 
-  if (request.nextUrl.pathname.startsWith("/dashboard") && !session) {
+  if (path.startsWith("/dashboard") && !session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (request.nextUrl.pathname === "/login" && session) {
+  if (session && (path === "/login" || path === "/registro")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
@@ -37,5 +38,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/login", "/registro", "/registro/completar", "/auth/callback"],
 };

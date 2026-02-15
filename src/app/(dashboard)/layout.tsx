@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
-import { DashboardNav } from "@/components/DashboardNav";
+import { DashboardShell } from "@/components/DashboardShell";
 
 export default async function DashboardLayout({
   children,
@@ -20,13 +20,12 @@ export default async function DashboardLayout({
     .single();
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-      <DashboardNav
-        userEmail={session.user.email ?? ""}
-        userName={profile?.nombre ?? undefined}
-        rol={profile?.rol ?? "viewer"}
-      />
-      <main className="p-3 sm:p-4 md:p-6 max-w-7xl mx-auto w-full overflow-x-hidden">{children}</main>
-    </div>
+    <DashboardShell
+      userEmail={session.user.email ?? ""}
+      userName={profile?.nombre ?? undefined}
+      rol={profile?.rol ?? "viewer"}
+    >
+      <div className="max-w-6xl mx-auto w-full min-w-0">{children}</div>
+    </DashboardShell>
   );
 }
