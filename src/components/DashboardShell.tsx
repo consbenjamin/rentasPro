@@ -41,6 +41,17 @@ export function DashboardShell({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Si el usuario se registró con confirmación por email, aplicar rol/nombre desde usuarios_pendientes al primer acceso
+  useEffect(() => {
+    fetch("/api/usuarios/completar-registro", { method: "POST" }).then((res) => {
+      if (res.ok) {
+        res.json().then((data) => {
+          if (data?.updated) window.location.reload();
+        }).catch(() => {});
+      }
+    });
+  }, []);
+
   async function handleLogout() {
     await supabase.auth.signOut();
     window.location.href = "/login";

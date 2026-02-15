@@ -65,7 +65,7 @@ Rentas Pro sirve para llevar la gestión de alquileres: propiedades, dueños, in
 
 - **Reportes PDF**: Generación de recibos de pago y liquidaciones para el propietario en PDF, para descargar o imprimir.
 
-- **Usuarios** (solo admin): Alta de usuarios y asignación de rol (admin, operador, propietario, solo lectura). Para los propietarios se asocia el usuario al propietario correspondiente para que solo vea sus datos.
+- **Usuarios** (solo admin): Alta de usuarios con email, nombre y rol (admin, operador, propietario, solo lectura). No se envía correo: cada usuario debe ir a **Registro**, ingresar su email y elegir su contraseña; esa será la que use para iniciar sesión. Ver `docs/FLUJO_USUARIOS.md` para el flujo completo.
 
 ## Desarrollo
 

@@ -15,24 +15,50 @@ export default async function UsuariosPage() {
     .single();
   if (myProfile?.rol !== "admin") redirect("/dashboard");
 
-  const [{ data: profiles }, { data: propietarios }] = await Promise.all([
+  const [{ data: profiles }, { data: propietarios }, { data: pendientes }] = await Promise.all([
     supabase
       .from("profiles")
       .select("id, rol, nombre, propietario_id, propietarios(nombre)")
       .order("rol"),
     supabase.from("propietarios").select("id, nombre").order("nombre"),
+    supabase.from("usuarios_pendientes").select("email, nombre, rol, created_at").order("created_at", { ascending: false }),
   ]);
+
+  const ROL_LABEL: Record<string, string> = {
+    admin: "Admin",
+    operador: "Operador",
+    owner: "Propietario",
+    viewer: "Solo lectura",
+  };
 
   return (
     <div>
       <div className="mb-6 sm:mb-8">
         <h1 className="page-title">Usuarios y roles</h1>
         <p className="page-subtitle">
-          Invitá usuarios, asigná roles y permisos, y gestioná el acceso al sistema.
+          Agregá usuarios (email, nombre y rol). Cada uno debe registrarse en la app con su correo y elegir su contraseña para iniciar sesión.
         </p>
       </div>
 
       <InvitarUsuarioForm propietarios={propietarios ?? []} className="mb-6" />
+
+      {pendientes && pendientes.length > 0 && (
+        <div className="mb-6 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10 p-4">
+          <h2 className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-2">Pendientes de registro</h2>
+          <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
+            Estos correos están dados de alta. Deben ir a <strong>Registro</strong> e ingresar su email y contraseña para poder entrar.
+          </p>
+          <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+            {pendientes.map((u) => (
+              <li key={u.email}>
+                <span className="font-medium text-slate-800 dark:text-slate-200">{u.email}</span>
+                {u.nombre && <span className="text-slate-500 dark:text-slate-400"> — {u.nombre}</span>}
+                <span className="text-slate-500 dark:text-slate-400"> ({ROL_LABEL[u.rol] ?? u.rol})</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="table-container">
         {profiles && profiles.length > 0 ? (

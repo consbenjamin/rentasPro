@@ -37,7 +37,7 @@ export function InvitarUsuarioForm({
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/usuarios/invite", {
+      const res = await fetch("/api/usuarios/agregar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -49,10 +49,13 @@ export function InvitarUsuarioForm({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setMessage({ type: "error", text: data?.error || "Error al invitar." });
+        setMessage({ type: "error", text: data?.error || "Error al agregar usuario." });
         return;
       }
-      setMessage({ type: "ok", text: "Invitación enviada. El usuario recibirá un correo para activar su cuenta." });
+      setMessage({
+        type: "ok",
+        text: "Usuario agregado. Debe ir a Registro, ingresar su correo y elegir su contraseña para poder iniciar sesión.",
+      });
       setEmail("");
       setNombre("");
       setPropietarioId("");
@@ -68,7 +71,7 @@ export function InvitarUsuarioForm({
       onSubmit={handleSubmit}
       className={`rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 ${className}`}
     >
-      <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3">Invitar usuario</h2>
+      <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3">Agregar usuario</h2>
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-end">
         <label className="flex flex-col gap-1 min-w-0 flex-1 sm:flex-initial sm:min-w-[200px]">
           <span className="text-sm text-slate-600 dark:text-slate-400">Email</span>
@@ -122,7 +125,7 @@ export function InvitarUsuarioForm({
           disabled={loading}
           className="px-4 py-2 rounded-lg bg-slate-800 dark:bg-slate-100 text-white dark:text-slate-900 text-sm font-medium hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? "Enviando…" : "Invitar"}
+          {loading ? "Agregando…" : "Agregar"}
         </button>
       </div>
       {message && (
