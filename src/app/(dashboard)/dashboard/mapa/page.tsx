@@ -9,10 +9,16 @@ const MapaPropiedades = dynamic(
 
 export default async function MapaPage() {
   const supabase = await createClient();
-  const { data: list } = await supabase
-    .from("propiedades")
-    .select("id, direccion, tipo, estado, lat, lng")
-    .order("direccion");
+  const { data: { session } } = await supabase.auth.getSession();
+  const [{ data: list }, { data: profile }] = await Promise.all([
+    supabase
+      .from("propiedades")
+      .select("id, direccion, tipo, estado, lat, lng")
+      .order("direccion"),
+    session
+      ? supabase.from("profiles").select("rol").eq("id", session.user.id).single()
+      : Promise.resolve({ data: null }),
+  ]);
 
   const propiedades: PropiedadMapa[] = (list ?? []).map((p) => ({
     id: p.id,
@@ -22,6 +28,8 @@ export default async function MapaPage() {
     lat: p.lat != null ? Number(p.lat) : null,
     lng: p.lng != null ? Number(p.lng) : null,
   }));
+
+  const canMoveMarkers = profile?.rol === "admin";
 
   return (
     <div>
@@ -34,7 +42,7 @@ export default async function MapaPage() {
           No hay propiedades. Agregá al menos una para verlas en el mapa.
         </p>
       ) : (
-        <MapaPropiedades propiedades={propiedades} />
+        <MapaPropiedades propiedades={propiedades} canMoveMarkers={canMoveMarkers} />
       )}
     </div>
   );

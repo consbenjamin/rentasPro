@@ -62,7 +62,13 @@ async function geocode(address: string): Promise<{ lat: number; lng: number } | 
   return typeof data.lat === "number" && typeof data.lng === "number" ? data : null;
 }
 
-export function MapaPropiedades({ propiedades }: { propiedades: PropiedadMapa[] }) {
+export function MapaPropiedades({
+  propiedades,
+  canMoveMarkers = false,
+}: {
+  propiedades: PropiedadMapa[];
+  canMoveMarkers?: boolean;
+}) {
   const [coords, setCoords] = useState<Map<string, { lat: number; lng: number }>>(() => {
     const m = new Map<string, { lat: number; lng: number }>();
     propiedades.forEach((p) => {
@@ -71,6 +77,7 @@ export function MapaPropiedades({ propiedades }: { propiedades: PropiedadMapa[] 
     return m;
   });
   const [loading, setLoading] = useState<Set<string>>(new Set());
+  const [saving, setSaving] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -116,6 +123,25 @@ export function MapaPropiedades({ propiedades }: { propiedades: PropiedadMapa[] 
     if (c) puntos.push([c.lat, c.lng]);
   });
 
+  async function handleMarkerDragEnd(propiedadId: string, lat: number, lng: number) {
+    setCoords((prev) => {
+      const next = new Map(prev);
+      next.set(propiedadId, { lat, lng });
+      return next;
+    });
+    setSaving((prev) => new Set(prev).add(propiedadId));
+    const supabase = createClient();
+    await supabase
+      .from("propiedades")
+      .update({ lat, lng, updated_at: new Date().toISOString() })
+      .eq("id", propiedadId);
+    setSaving((prev) => {
+      const next = new Set(prev);
+      next.delete(propiedadId);
+      return next;
+    });
+  }
+
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-800">
       <div className="h-[500px] w-full relative">
@@ -134,13 +160,32 @@ export function MapaPropiedades({ propiedades }: { propiedades: PropiedadMapa[] 
             const c = coords.get(p.id) ?? (p.lat != null && p.lng != null ? { lat: p.lat, lng: p.lng } : null);
             if (!c) return null;
             return (
-              <Marker key={p.id} position={[c.lat, c.lng]}>
+              <Marker
+                key={p.id}
+                position={[c.lat, c.lng]}
+                draggable={canMoveMarkers}
+                eventHandlers={
+                  canMoveMarkers
+                    ? {
+                        dragend: (e) => {
+                          const latlng = e.target.getLatLng();
+                          handleMarkerDragEnd(p.id, latlng.lat, latlng.lng);
+                        },
+                      }
+                    : undefined
+                }
+              >
                 <Popup>
                   <div className="min-w-[180px] text-slate-800 dark:text-slate-200">
                     <p className="font-medium">{p.direccion}</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">
                       {TIPO[p.tipo]} · {ESTADO[p.estado]}
                     </p>
+                    {canMoveMarkers && (
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                        Arrastrá el marcador en el mapa para reubicar.
+                      </p>
+                    )}
                     <Link
                       href={`/dashboard/propiedades/${p.id}`}
                       className="mt-2 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline"
@@ -160,7 +205,19 @@ export function MapaPropiedades({ propiedades }: { propiedades: PropiedadMapa[] 
             </span>
           </div>
         )}
+        {saving.size > 0 && (
+          <div className="absolute bottom-4 left-4 right-4 flex justify-center">
+            <span className="px-3 py-1.5 rounded-lg bg-emerald-700/90 text-white text-sm">
+              Guardando nueva ubicación…
+            </span>
+          </div>
+        )}
       </div>
+      {canMoveMarkers && (
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          Arrastrá un marcador en el mapa para reubicar esa propiedad. La nueva posición se guarda automáticamente.
+        </p>
+      )}
     </div>
   );
 }
