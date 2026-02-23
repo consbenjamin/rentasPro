@@ -11,17 +11,37 @@ const ROL_LABEL: Record<RolUsuario, string> = {
   viewer: "Solo lectura",
 };
 
-const NAV_LINKS: { href: string; label: string; roles?: RolUsuario[] }[] = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/dashboard/propiedades", label: "Propiedades", roles: ["admin", "operador", "owner", "viewer"] },
-  { href: "/dashboard/mapa", label: "Mapa", roles: ["admin", "operador", "owner", "viewer"] },
-  { href: "/dashboard/inquilinos", label: "Inquilinos", roles: ["admin", "operador", "viewer"] },
-  { href: "/dashboard/propietarios", label: "Propietarios", roles: ["admin", "operador", "viewer"] },
-  { href: "/dashboard/contratos", label: "Contratos" },
-  { href: "/dashboard/pagos", label: "Pagos" },
-  { href: "/dashboard/alertas", label: "Alertas" },
-  { href: "/dashboard/reportes", label: "Reportes", roles: ["admin", "operador", "owner", "viewer"] },
-  { href: "/dashboard/usuarios", label: "Usuarios", roles: ["admin"] },
+type NavLink = {
+  href: string;
+  label: string;
+  icon: string;
+  roles?: RolUsuario[];
+};
+
+const NAV_SECTIONS: { title: string; links: NavLink[] }[] = [
+  {
+    title: "Vista general",
+    links: [{ href: "/dashboard", label: "Inicio", icon: "Inicio" }],
+  },
+  {
+    title: "Operación",
+    links: [
+      { href: "/dashboard/propiedades", label: "Propiedades", icon: "Casas", roles: ["admin", "operador", "owner", "viewer"] },
+      { href: "/dashboard/inquilinos", label: "Inquilinos", icon: "Personas", roles: ["admin", "operador", "viewer"] },
+      { href: "/dashboard/propietarios", label: "Propietarios", icon: "Dueños", roles: ["admin", "operador", "viewer"] },
+      { href: "/dashboard/contratos", label: "Contratos", icon: "Firmas" },
+      { href: "/dashboard/pagos", label: "Pagos", icon: "Dinero" },
+    ],
+  },
+  {
+    title: "Análisis y control",
+    links: [
+      { href: "/dashboard/alertas", label: "Alertas", icon: "Avisos" },
+      { href: "/dashboard/reportes", label: "Reportes", icon: "PDF", roles: ["admin", "operador", "owner", "viewer"] },
+      { href: "/dashboard/mapa", label: "Mapa", icon: "Mapa", roles: ["admin", "operador", "owner", "viewer"] },
+      { href: "/dashboard/usuarios", label: "Usuarios", icon: "Equipo", roles: ["admin"] },
+    ],
+  },
 ];
 
 export function DashboardSidebar({
@@ -34,7 +54,10 @@ export function DashboardSidebar({
   onClose: () => void;
 }) {
   const pathname = usePathname();
-  const links = NAV_LINKS.filter((l) => !l.roles || l.roles.includes(rol));
+  const sections = NAV_SECTIONS.map((section) => ({
+    ...section,
+    links: section.links.filter((link) => !link.roles || link.roles.includes(rol)),
+  })).filter((section) => section.links.length > 0);
 
   return (
     <>
@@ -82,29 +105,39 @@ export function DashboardSidebar({
         </div>
 
         <nav className="flex-1 p-3 overflow-y-auto">
-          <ul className="space-y-0.5">
-            {links.map(({ href, label }) => {
-              const isActive =
-                href === "/dashboard"
-                  ? pathname === "/dashboard"
-                  : pathname.startsWith(href);
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    onClick={onClose}
-                    className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
-                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200"
-                    }`}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="space-y-4">
+            {sections.map((section) => (
+              <div key={section.title}>
+                <p className="px-3 py-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  {section.title}
+                </p>
+                <ul className="mt-1 space-y-0.5">
+                  {section.links.map(({ href, label, icon }) => {
+                    const isActive =
+                      href === "/dashboard"
+                        ? pathname === "/dashboard"
+                        : pathname.startsWith(href);
+                    return (
+                      <li key={href}>
+                        <Link
+                          href={href}
+                          onClick={onClose}
+                          className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                            isActive
+                              ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
+                              : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200"
+                          }`}
+                        >
+                          <span>{label}</span>
+                          <span className="text-[10px] uppercase tracking-wide opacity-70">{icon}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
         </nav>
 
         <div className="p-3 border-t border-slate-200 dark:border-slate-800">

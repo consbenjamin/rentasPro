@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase";
 import { useTheme } from "@/components/ThemeProvider";
 import type { RolUsuario } from "@/types/database";
 import { DashboardSidebar } from "./DashboardSidebar";
+import { usePathname } from "next/navigation";
 
 const ROL_LABEL: Record<RolUsuario, string> = {
   admin: "Admin",
@@ -28,8 +29,11 @@ export function DashboardShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   const supabase = createClient();
   const { theme, toggleTheme } = useTheme();
+
+  const currentSection = getSectionTitle(pathname);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -64,7 +68,7 @@ export function DashboardShell({
       {/* Espacio para sidebar en desktop */}
       <div className="md:pl-64">
         {/* Header mínimo */}
-        <header className="sticky top-0 z-30 h-14 md:h-16 border-b border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md flex items-center justify-between px-4 sm:px-6">
+        <header className="sticky top-0 z-[1000] h-14 md:h-16 border-b border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md flex items-center justify-between px-4 sm:px-6 gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
@@ -87,6 +91,10 @@ export function DashboardShell({
                 Rentas Pro
               </span>
             </Link>
+            <div className="hidden md:block h-6 w-px bg-slate-200 dark:bg-slate-700" />
+            <p className="hidden md:block text-sm text-slate-600 dark:text-slate-300 truncate">
+              {currentSection}
+            </p>
           </div>
 
           <div className="relative shrink-0" ref={userMenuRef}>
@@ -109,7 +117,7 @@ export function DashboardShell({
             </button>
 
             {userMenuOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg py-2 z-50">
+              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg py-2 z-[1001]">
                 <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
                   <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">
                     {userName || "Usuario"}
@@ -164,4 +172,18 @@ export function DashboardShell({
       </div>
     </div>
   );
+}
+
+function getSectionTitle(pathname: string): string {
+  if (pathname === "/dashboard") return "Resumen operativo";
+  if (pathname.startsWith("/dashboard/propiedades")) return "Propiedades";
+  if (pathname.startsWith("/dashboard/inquilinos")) return "Inquilinos";
+  if (pathname.startsWith("/dashboard/propietarios")) return "Propietarios";
+  if (pathname.startsWith("/dashboard/contratos")) return "Contratos";
+  if (pathname.startsWith("/dashboard/pagos")) return "Pagos y deuda";
+  if (pathname.startsWith("/dashboard/alertas")) return "Alertas";
+  if (pathname.startsWith("/dashboard/reportes")) return "Reportes";
+  if (pathname.startsWith("/dashboard/mapa")) return "Mapa";
+  if (pathname.startsWith("/dashboard/usuarios")) return "Usuarios y permisos";
+  return "Panel";
 }

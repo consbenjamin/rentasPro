@@ -35,7 +35,6 @@ export default async function DashboardPage() {
 
   const totalProp = (propiedades ?? []).length;
   const alquiladas = (propiedades ?? []).filter((p) => p.estado === "alquilada").length;
-  const disponibles = (propiedades ?? []).filter((p) => p.estado === "disponible").length;
   const ocupacion = totalProp > 0 ? Math.round((alquiladas / totalProp) * 100) : 0;
 
   const hoy = now.getTime();
@@ -76,39 +75,96 @@ export default async function DashboardPage() {
   }
 
   const cards = [
-    { title: "Ingresos del mes", value: `$${ingresosMes.toLocaleString("es-AR")}`, href: "/dashboard/pagos" },
-    { title: "Ingresos acumulado", value: `$${ingresosAcumulado.toLocaleString("es-AR")}`, href: "/dashboard/pagos" },
-    { title: "Morosidad", value: `${morosidadCount} contrato(s) · $${morosidadMonto.toLocaleString("es-AR")}`, href: "/dashboard/pagos" },
-    { title: "Contratos por vencer", sub: "7 / 30 / 60 días", value: `${vencen7} / ${vencen30} / ${vencen60}`, href: "/dashboard/contratos" },
-    { title: "Ocupación", value: `${ocupacion}%`, sub: `${alquiladas}/${totalProp} propiedades`, href: "/dashboard/propiedades" },
-    { title: "Alertas sin leer", value: String(countAlertas ?? 0), href: "/dashboard/alertas" },
+    { title: "Ingresos cobrados este mes", value: `$${ingresosMes.toLocaleString("es-AR")}`, helper: "Pagos con fecha dentro del mes actual", href: "/dashboard/pagos" },
+    { title: "Ingresos históricos cobrados", value: `$${ingresosAcumulado.toLocaleString("es-AR")}`, helper: "Total acumulado de pagos registrados", href: "/dashboard/pagos" },
+    { title: "Ocupación actual", value: `${ocupacion}%`, helper: `${alquiladas} alquiladas de ${totalProp} propiedades`, href: "/dashboard/propiedades" },
+    { title: "Alertas sin leer", value: String(countAlertas ?? 0), helper: "Recordatorios pendientes por revisar", href: "/dashboard/alertas" },
+  ];
+
+  const quickActions = [
+    { href: "/dashboard/propiedades/nueva", label: "Nueva propiedad", detail: "Registrar una unidad nueva" },
+    { href: "/dashboard/contratos/nuevo", label: "Nuevo contrato", detail: "Vincular inquilino y propiedad" },
+    { href: "/dashboard/pagos/nuevo", label: "Registrar pago", detail: "Cargar pago recibido" },
+    { href: "/dashboard/alertas", label: "Ver alertas", detail: "Priorizar pendientes críticos" },
   ];
 
   return (
-    <div>
+    <div className="space-y-6 sm:space-y-8">
       <div className="mb-6 sm:mb-8">
-        <h1 className="page-title">Dashboard</h1>
-        <p className="page-subtitle">Resumen general de tu operación</p>
+        <h1 className="page-title">Resumen operativo</h1>
+        <p className="page-subtitle">Estado actual de cobros, contratos y seguimiento</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {cards.map(({ title, value, sub, href }) => (
-          <Link
-            key={title}
-            href={href}
-            className="card group block overflow-hidden"
-          >
-            <div className="card-body">
-              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{title}</p>
-              <p className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100 mt-2 tracking-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                {value}
-              </p>
-              {sub && (
-                <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{sub}</p>
-              )}
+
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-3">
+          Indicadores clave
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          {cards.map(({ title, value, helper, href }) => (
+            <Link key={title} href={href} className="card group block overflow-hidden">
+              <div className="card-body">
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{title}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100 mt-1.5 tracking-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  {value}
+                </p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{helper}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="card lg:col-span-2">
+          <div className="card-body">
+            <h2 className="text-base font-semibold text-slate-800 dark:text-slate-100">
+              Atención prioritaria
+            </h2>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <Link href="/dashboard/pagos" className="rounded-lg border border-slate-200 dark:border-slate-700 p-3 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors">
+                <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Morosidad</p>
+                <p className="mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100">
+                  {morosidadCount} contrato(s)
+                </p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">${morosidadMonto.toLocaleString("es-AR")}</p>
+              </Link>
+              <Link href="/dashboard/contratos" className="rounded-lg border border-slate-200 dark:border-slate-700 p-3 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors">
+                <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Vencen en 7 días</p>
+                <p className="mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100">{vencen7}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Contratos próximos a finalizar</p>
+              </Link>
+              <Link href="/dashboard/contratos" className="rounded-lg border border-slate-200 dark:border-slate-700 p-3 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors">
+                <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Vencen en 30 días</p>
+                <p className="mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100">{vencen30}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Para planificar renovaciones</p>
+              </Link>
             </div>
-          </Link>
-        ))}
-      </div>
+            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+              También hay {vencen60} contrato(s) que vencen en 60 días.
+            </p>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-body">
+            <h2 className="text-base font-semibold text-slate-800 dark:text-slate-100">
+              Acciones rápidas
+            </h2>
+            <div className="mt-3 space-y-2">
+              {quickActions.map((action) => (
+                <Link
+                  key={action.href}
+                  href={action.href}
+                  className="block rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2.5 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors"
+                >
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{action.label}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{action.detail}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
